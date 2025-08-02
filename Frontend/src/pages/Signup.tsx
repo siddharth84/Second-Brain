@@ -1,73 +1,34 @@
-import { useState } from "react";
+import { useRef } from "react";
+import { Button } from "../components/Button";
+import { Input } from "../components/Input";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
 import { useNavigate } from "react-router-dom";
 
 export function Signup() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
-  const navigate = useNavigate();
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const navigate = useNavigate();
 
-  async function handleSignup(e: React.FormEvent) {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
-        username,
-        password,
-      });
-
-      const token = response.data.token;
-      if (token) {
-        localStorage.setItem("token", token);
-        setSuccessMessage("User created!");
-
-        setTimeout(() => {
-          navigate("/dashboard"); // redirect after showing message
-        }, 1500);
-      }
-    } catch (err) {
-      console.error(err);
+    async function signup() {
+        const username = usernameRef.current?.value;
+        console.log(usernameRef.current)
+        const password = passwordRef.current?.value;
+        await axios.post(BACKEND_URL + "/api/v1/signup", {
+            username,
+            password
+        })
+        navigate("/signin")
+        alert("You have signed up!")
     }
-  }
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
-      {successMessage && (
-        <div className="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded">
-          {successMessage}
+    return <div className="h-screen w-screen bg-gray-200 flex justify-center items-center">
+        <div className="bg-white rounded-xl border min-w-48 p-8">
+            <Input reference={usernameRef} placeholder="Username" />
+            <Input reference={passwordRef} placeholder="Password" />
+            <div className="flex justify-center pt-4">
+                <Button onClick={signup} loading={false} variant="primary" text="Signup" fullWidth={true} />
+            </div>
         </div>
-      )}
-
-      <form
-        onSubmit={handleSignup}
-        className="bg-white shadow-md rounded px-8 pt-6 pb-8"
-      >
-        <h2 className="mb-4 text-xl font-bold">Sign Up</h2>
-        <input
-          className="mb-3 border rounded w-full py-2 px-3 text-gray-700"
-          type="text"
-          placeholder="Username or Email"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <input
-          className="mb-3 border rounded w-full py-2 px-3 text-gray-700"
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button
-          type="submit"
-          className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded w-full"
-        >
-          Create Account
-        </button>
-      </form>
     </div>
-  );
 }

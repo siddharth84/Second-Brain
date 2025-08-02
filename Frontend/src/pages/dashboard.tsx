@@ -1,4 +1,5 @@
-// 📁 frontend/pages/Dashboard.tsx
+// frontend/pages/Dashboard.tsx
+
 import { useEffect, useState } from "react";
 import { Button } from "../components/Button";
 import { Card } from "../components/Card";
@@ -7,6 +8,7 @@ import { PlusIcon } from "../icons/PlusIcon";
 import { ShareIcon } from "../icons/ShareIcon";
 import { Sidebar } from "../components/Sidebar";
 import { useContent } from "../hooks/useContent";
+//const { contents, refresh, username } = useContent();
 import { BACKEND_URL } from "../config";
 import axios from "axios";
 
@@ -14,9 +16,11 @@ export function Dashboard() {
   const [modalOpen, setModalOpen] = useState(false);
   const { contents, refresh, username } = useContent();
 
-  useEffect(() => {
-    refresh();
-  }, [modalOpen]);
+  // You can remove this useEffect hook. The one inside useContent is sufficient.
+  // The state update within the useContent hook will cause a re-render here.
+  // useEffect(() => {
+  //   refresh();
+  // }, [modalOpen]);
 
   function handleLogout() {
     localStorage.removeItem("token");
@@ -73,10 +77,11 @@ export function Dashboard() {
         </div>
 
         <div className="flex gap-4 flex-wrap pt-4">
-          {contents.map(({ type, link, title }, index) => (
-            <Card key={index} type={type} link={link} title={title} />
-          ))}
-        </div>
+    {/* Destructure _id and use it as the key */}
+    {contents.map(({ _id, type, link, title }) => (
+        <Card key={_id} type={type} link={link} title={title} />
+    ))}
+</div>
       </div>
     </div>
   );
