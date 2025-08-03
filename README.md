@@ -2,10 +2,7 @@
 
 A full-stack web application designed to help you capture, organize, and share your most valuable online content, creating your own personal digital library.
 
-![App Screenshot](https://via.placeholder.com/800x450.png?text=Your+App+Screenshot+Here)
 <img width="1906" height="872" alt="Screenshot 2025-08-02 214702" src="https://github.com/user-attachments/assets/e0610b63-d06f-41d3-a613-3f4128486de0" />
-
-*Replace the placeholder above with a real screenshot or GIF of your application.*
 
 ---
 
