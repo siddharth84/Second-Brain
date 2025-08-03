@@ -86,6 +86,19 @@ app.get("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(
         content
     });
 }));
+// Add this route to your Express backend
+app.get("/api/v1/user/me", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // The userMiddleware adds the userId to the request object
+    // @ts-ignore
+    const userId = req.userId;
+    const user = yield db_1.UserModel.findById(userId);
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+    res.json({
+        username: user.username
+    });
+}));
 app.delete("/api/v1/content", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const contentId = req.body.contentId;
     yield db_1.ContentModel.deleteMany({
@@ -125,19 +138,6 @@ app.post("/api/v1/brain/share", middleware_1.userMiddleware, (req, res) => __awa
             message: "Removed link"
         });
     }
-}));
-// Add this route to your Express backend
-app.get("/api/v1/user/me", middleware_1.userMiddleware, (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    // The userMiddleware adds the userId to the request object
-    // @ts-ignore
-    const userId = req.userId;
-    const user = yield db_1.UserModel.findById(userId);
-    if (!user) {
-        return res.status(404).json({ message: "User not found" });
-    }
-    res.json({
-        username: user.username
-    });
 }));
 app.get("/api/v1/brain/:shareLink", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const hash = req.params.shareLink;

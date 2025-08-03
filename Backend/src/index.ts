@@ -82,6 +82,22 @@ app.get("/api/v1/content", userMiddleware, async (req, res) => {
     })
 })
 
+// Add this route to your Express backend
+app.get("/api/v1/user/me", userMiddleware, async (req, res) => {
+    // The userMiddleware adds the userId to the request object
+    // @ts-ignore
+    const userId = req.userId;
+    const user = await UserModel.findById(userId);
+
+    if (!user) {
+        return res.status(404).json({ message: "User not found" });
+    }
+
+    res.json({
+        username: user.username
+    });
+});
+
 app.delete("/api/v1/content", userMiddleware, async (req, res) => {
     const contentId = req.body.contentId;
 
